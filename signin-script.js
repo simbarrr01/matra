@@ -17,12 +17,7 @@ function initSignInForm() {
     const btnText = document.querySelector('.btn-text');
     const btnLoader = document.querySelector('.btn-loader');
     
-    // Valid credentials
-    const validCredentials = {
-        username: 'jamieshawld@gmail.com',
-        password: 'AltCtrl22'
-    };
-    
+    // Anyone can log in: we’ll only require non-empty fields (no fixed credentials)
     signinForm.addEventListener('submit', function(e) {
         e.preventDefault();
         
@@ -33,7 +28,8 @@ function initSignInForm() {
         showLoadingState();
         
         setTimeout(() => {
-            if (username === validCredentials.username && password === validCredentials.password) {
+            // Allow login for any non-empty username/password
+            if (username.length > 0 && password.length > 0) {
                 showSuccessMessage('Login successful! Redirecting...');
                 
                 setTimeout(() => {
@@ -44,7 +40,7 @@ function initSignInForm() {
                     window.location.href = 'dashboard.html';
                 }, 2000);
             } else {
-                showErrorMessage('Invalid username or password. Please try again.');
+                showErrorMessage('Please enter a username and password.');
                 hideLoadingState();
             }
         }, 1500);
@@ -363,4 +359,4 @@ document.addEventListener('DOMContentLoaded', function() {
 // Console welcome message
 console.log('🔐 Sign In page loaded successfully!');
 console.log('📧 Demo credentials: jamieshawld@gmail.com / AltCtrl22');
-console.log('💡 Use the \"Auto-fill Demo\" button for quick testing');
+console.log('💡 Use the "Auto-fill Demo" button for quick testing');
