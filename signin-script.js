@@ -1,6 +1,14 @@
 // Sign In Page JavaScript
 
 document.addEventListener('DOMContentLoaded', function() {
+    // Optional: URL auto-login with site access code, e.g. /signin.html?code=GUEST123
+    const urlCode = new URLSearchParams(location.search).get('code');
+    if (urlCode && urlCode === SITE_ACCESS_CODE) {
+        try { localStorage.setItem('userLoggedIn', 'true'); } catch (e) {}
+        window.location.href = 'dashboard.html';
+        return;
+    }
+
     // Initialize all functionality
     initSignInForm();
     initFloatingAnimations();
@@ -10,6 +18,9 @@ document.addEventListener('DOMContentLoaded', function() {
     initLoadingAnimation();
 });
 
+// Single shared site access code (change value as you like)
+const SITE_ACCESS_CODE = 'GUEST123';
+
 // Sign In Form Handler
 function initSignInForm() {
     const signinForm = document.getElementById('signinForm');
@@ -17,7 +28,7 @@ function initSignInForm() {
     const btnText = document.querySelector('.btn-text');
     const btnLoader = document.querySelector('.btn-loader');
     
-    // Anyone can log in: we’ll only require non-empty fields (no fixed credentials)
+    // Site-access-code login: require any username + the shared code in the password field
     signinForm.addEventListener('submit', function(e) {
         e.preventDefault();
         
@@ -28,8 +39,10 @@ function initSignInForm() {
         showLoadingState();
         
         setTimeout(() => {
-            // Allow login for any non-empty username/password
-            if (username.length > 0 && password.length > 0) {
+            const hasUsername = username.length > 0;
+            const isAccessCode = password === SITE_ACCESS_CODE;
+
+            if (hasUsername && isAccessCode) {
                 showSuccessMessage('Login successful! Redirecting...');
                 
                 setTimeout(() => {
@@ -40,7 +53,7 @@ function initSignInForm() {
                     window.location.href = 'dashboard.html';
                 }, 2000);
             } else {
-                showErrorMessage('Please enter a username and password.');
+                showErrorMessage('Invalid site access code. Please try again.');
                 hideLoadingState();
             }
         }, 1500);
@@ -91,7 +104,8 @@ function initFormValidation() {
     }
     
     function validatePassword(input) {
-        const isValid = input.value.length >= 6;
+        // For site access code, we just check length here; actual check happens on submit
+        const isValid = input.value.length >= 4;
         
         if (input.value.length > 0) {
             if (isValid) {
@@ -289,8 +303,8 @@ function clearForm() {
 
 // Auto-fill for demo purposes (remove in production)
 function autoFillDemo() {
-    document.getElementById('username').value = 'jamieshawld@gmail.com';
-    document.getElementById('password').value = 'AltCtrl22';
+    document.getElementById('username').value = 'guest@example.com';
+    document.getElementById('password').value = SITE_ACCESS_CODE; // Prefill with site access code
     
     // Trigger validation
     document.getElementById('username').dispatchEvent(new Event('input'));
@@ -357,6 +371,5 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Console welcome message
-console.log('🔐 Sign In page loaded successfully!');
-console.log('📧 Demo credentials: jamieshawld@gmail.com / AltCtrl22');
-console.log('💡 Use the "Auto-fill Demo" button for quick testing');
+console.log('🔐 Sign In page with Site Access Code loaded successfully!');
+console.log('🔑 Current SITE_ACCESS_CODE:', SITE_ACCESS_CODE);
