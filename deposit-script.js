@@ -1,6 +1,13 @@
 // Deposit Page JavaScript
 
 document.addEventListener('DOMContentLoaded', function() {
+    // Auth guard: require login
+    const isLoggedIn = localStorage.getItem('userLoggedIn') === 'true';
+    if (!isLoggedIn) {
+        window.location.href = 'signin.html';
+        return;
+    }
+
     // Initialize deposit page
     initDepositPage();
     initPaymentMethodSelector();
