@@ -29,16 +29,18 @@ function initSignInForm() {
         const username = document.getElementById('username').value.trim();
         const password = document.getElementById('password').value;
         
-       
+        // Show loading state
         showLoadingState();
-        
         
         setTimeout(() => {
             if (username === validCredentials.username && password === validCredentials.password) {
                 showSuccessMessage('Login successful! Redirecting...');
                 
-                
                 setTimeout(() => {
+                    // Mark user as logged in so protected pages can be opened directly
+                    try {
+                        localStorage.setItem('userLoggedIn', 'true');
+                    } catch (err) {}
                     window.location.href = 'dashboard.html';
                 }, 2000);
             } else {
@@ -299,8 +301,6 @@ function autoFillDemo() {
     document.getElementById('password').dispatchEvent(new Event('input'));
 }
 
-
-
 // Initialize demo button (for testing)
 addDemoButton();
 
@@ -363,4 +363,4 @@ document.addEventListener('DOMContentLoaded', function() {
 // Console welcome message
 console.log('🔐 Sign In page loaded successfully!');
 console.log('📧 Demo credentials: jamieshawld@gmail.com / AltCtrl22');
-console.log('💡 Use the "Auto-fill Demo" button for quick testing');
+console.log('💡 Use the \"Auto-fill Demo\" button for quick testing');
