@@ -1,6 +1,14 @@
-// Withdrawal Page JavaScript
+
+   // Withdrawal Page JavaScript
 
 document.addEventListener('DOMContentLoaded', function() {
+    // Auth guard: require login
+    const isLoggedIn = localStorage.getItem('userLoggedIn') === 'true';
+    if (!isLoggedIn) {
+        window.location.href = 'signin.html';
+        return;
+    }
+
     // Initialize withdrawal page
     initWithdrawalPage();
     initCoinSelector();
@@ -659,10 +667,10 @@ function processWithdrawalWithCode(amount, address, network) {
         // Reset form
         resetWithdrawalForm();
 
-          // Redirect to dashboard after 2 seconds
-   setTimeout(() => {
-       window.location.href = 'dashboard.html';
-   }, 2000);
+        // Redirect to dashboard after 2 seconds
+        setTimeout(() => {
+            window.location.href = 'dashboard.html';
+        }, 2000);
         
     }, 3000);
 }
